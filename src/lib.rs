@@ -34,38 +34,56 @@
 #[cfg(all(test, not(feature = "test")))]
 compile_error!("Make sure you run tests with `cargo test --features test`");
 
+#[cfg(all(feature = "desktop", target_arch = "wasm32"))]
+compile_error!("Make sure you add `--no-default-features` when compiling to wasm");
+
 #[macro_use]
 extern crate serde_derive;
 
 extern crate serde;
 extern crate serde_json;
 
+#[cfg(not(target_arch = "wasm32"))]
 extern crate piston_window;
 extern crate interpolation;
 extern crate rand as rand_crate;
 
 mod turtle_window;
 
+#[cfg(not(target_arch = "wasm32"))]
 mod app;
 mod turtle;
 mod speed;
 mod radians;
 mod animation;
 mod extensions;
+#[cfg(not(target_arch = "wasm32"))]
 mod renderer;
 mod state;
 mod query;
+#[cfg(not(target_arch = "wasm32"))]
 mod server;
 mod renderer_process;
+#[cfg(not(target_arch = "wasm32"))]
 mod messenger;
 
 pub mod color;
+#[cfg(not(target_arch = "wasm32"))]
 pub mod event;
+#[cfg(target_arch = "wasm32")]
+mod event {
+    #[derive(Debug, Clone, Serialize, Deserialize)]
+    pub enum Event {}
+}
 pub mod rand;
 
-pub use server::start;
 pub use turtle::{Turtle, Point, Distance, Angle};
 pub use speed::{Speed};
 pub use color::{Color};
 pub use event::Event;
 pub use rand::{random, random_range};
+
+#[cfg(not(target_arch = "wasm32"))]
+pub use server::start;
+#[cfg(target_arch = "wasm32")]
+pub fn start() {}

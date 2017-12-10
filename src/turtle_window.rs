@@ -1,17 +1,36 @@
 use std::time::Instant;
 use std::cell::RefCell;
 
-use piston_window::math;
-
-use server;
 use renderer_process::RendererProcess;
 use animation::{Animation, MoveAnimation, RotateAnimation, AnimationStatus};
 use state::{TurtleState, DrawingState, Path};
 use query::{Query, Request, StateUpdate, DrawingCommand, Response};
 use radians::{self, Radians};
-use {Point, Distance, Event};
+use {Point, Distance, Event, start};
 
 use self::DrawingCommand::*;
+
+mod math {
+    use {Point};
+
+    /// Computes the square length of a vector.
+    #[inline(always)]
+    pub fn square_len(a: Point) -> f64 {
+        a[0] * a[0] + a[1] * a[1]
+    }
+
+    /// Adds two vectors.
+    #[inline(always)]
+    pub fn add(a: Point, b: Point) -> Point {
+        [a[0] + b[0], a[1] + b[1]]
+    }
+
+    /// Subtracts 'b' from 'a'.
+    #[inline(always)]
+    pub fn sub(a: Point, b: Point) -> Point {
+        [a[0] - b[0], a[1] - b[1]]
+    }
+}
 
 pub struct TurtleWindow {
     renderer: RefCell<RendererProcess>,
@@ -22,7 +41,7 @@ impl TurtleWindow {
         // This needs to be called as close to the start of the program as possible
         // Since Turtle::new() is called at the beginning of many turtle programs, we do so here
         // to make sure this call occurs when it should.
-        server::start();
+        start();
 
         Self {
             renderer: RefCell::new(RendererProcess::new()),

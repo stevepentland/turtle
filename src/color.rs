@@ -87,6 +87,7 @@
 
 use std::iter::repeat;
 
+#[cfg(not(target_arch = "wasm32"))]
 use piston_window::types;
 use rand::{Rand, Rng};
 
@@ -154,6 +155,7 @@ impl Rand for Color {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl From<Color> for types::Color {
     fn from(color: Color) -> Self {
         [

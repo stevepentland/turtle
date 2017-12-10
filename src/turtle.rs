@@ -3,6 +3,7 @@ use std::time::Duration;
 
 use radians::{self, Radians};
 use turtle_window::TurtleWindow;
+#[cfg(not(target_arch = "wasm32"))]
 use event::MouseButton;
 use {Speed, Color, Event};
 
@@ -1043,6 +1044,7 @@ impl Turtle {
     ///     turtle.forward(100.0);
     /// }
     /// ```
+    #[cfg(not(target_arch = "wasm32"))]
     pub fn wait_for_click(&mut self) {
         loop {
             if let Some(Event::MouseButtonReleased(MouseButton::Left)) = self.poll_event() {
