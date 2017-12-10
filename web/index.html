@@ -1,0 +1,14 @@
+<script type='text/javascript'>
+  var Module = {};
+  fetch('circle-2c70d7c16e5a781a.wasm')
+    .then(response => response.arrayBuffer())
+    .then(buffer => {
+      Module.wasmBinary = buffer;
+      var script = document.createElement('script');
+      script.src = "circle.js";
+      script.onload = function() {
+        console.log("Emscripten boilerplate loaded.")
+      }
+      document.body.appendChild(script);
+    });
+</script>
