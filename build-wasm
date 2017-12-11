@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# To build with emscripten instead, download `wargo` and use `wargo build`
+# https://github.com/lord/wargo
+
+set -e
+
+echo -n "$(tput setaf 3)"
+echo 'This script builds turtle with wasm32-unknown-unknown'
+echo 'Setup Instructions: https://www.hellorust.com/setup/wasm-target/'
+echo 'Pass in the example you want to build with `--example foo`'
+echo 'Use `--release` to build in release mode'
+echo $(tput bold)'Do not forget to use `wasm-gc` to shrink the resulting wasm file'
+echo "$(tput sgr 0)"
+
+# Use RUSTFLAGS=-g in release mode to get debug symbols
+cargo +nightly build --target wasm32-unknown-unknown --no-default-features "$@"
